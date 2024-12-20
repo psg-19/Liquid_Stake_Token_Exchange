@@ -15,14 +15,14 @@ function getDaysSince()
 
 function getSolanaFromLST(lstAmount) {
   const daysPassed = getDaysSince();
-  const lstValue = 1 + (0.000001 * daysPassed);
+  const lstValue = 1 + (0.00000001* daysPassed);
   const solanaEquivalent = lstAmount * lstValue;
   return solanaEquivalent;
 }
 
 function getLSTFromSolana(solanaAmount) {
   const daysPassed = getDaysSince();
-  const lstValue = 1 + (0.000001 * daysPassed);
+  const lstValue = 1 + (0.00000001 * daysPassed);
   const lstEquivalent = solanaAmount / lstValue;
   return lstEquivalent;
 }
@@ -56,6 +56,7 @@ console.log("hiii  ",x)
 // console.log(x)
 
 // return
+
 const destPDA=await getOrCreateAssociatedTokenAccount(
    connection,
   payer,
@@ -71,11 +72,9 @@ console.log("PDA = "+destPDA.address)
 
 
 
- const pp= await mintTo(connection,payer,mintAdress,destPDA.address,payer,x,[],undefined,TOKEN_2022_PROGRAM_ID)
+  await mintTo(connection,payer,mintAdress,destPDA.address,payer,x,[],undefined,TOKEN_2022_PROGRAM_ID)
   .then((res)=>{
-    console.log("TRANSXN DONE + " 
-      
-      +res)
+    console.log("TRANSXN DONE + " +res)
     // console.log(pp)
   })
 .catch((e)=>{

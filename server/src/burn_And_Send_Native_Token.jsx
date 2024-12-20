@@ -19,14 +19,14 @@ function getDaysSince()
 
 function getSolanaFromLST(lstAmount) {
   const daysPassed = getDaysSince();
-  const lstValue = 1 + (0.000001 * daysPassed);
+  const lstValue = 1 + (0.00000001 * daysPassed);
   const solanaEquivalent = lstAmount * lstValue;
   return solanaEquivalent;
 }
 
 function getLSTFromSolana(solanaAmount) {
   const daysPassed = getDaysSince();
-  const lstValue = 1 + (0.000001 * daysPassed);
+  const lstValue = 1 + (0.00000001 * daysPassed);
   const lstEquivalent = solanaAmount / lstValue;
   return lstEquivalent;
 }

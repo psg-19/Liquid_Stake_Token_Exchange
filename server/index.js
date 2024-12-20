@@ -1,5 +1,6 @@
 const express=require('express')
 const app=express()
+const cors=require('cors')
 // const {mintToken} =require('./src/mintToken.jsx')
 const {
     Connection,
@@ -21,6 +22,69 @@ const { getSplTokenBalances, getMintAmount, getNativeSolAmount } = require('./sr
 require('dotenv').config();
 
 app.use(express.json());
+
+
+app.use(cors({
+  origin: "http://localhost:5173",
+//   origin: FRONTEND_URL,
+
+  optionsSuccessStatus: 200,
+  credentials: true 
+}));
+
+
+function getDaysSince() 
+{
+  
+  let startDate=Date.parse("2024-12-20T14:24:51.225Z")
+  const currentDate = new Date();
+  const timeDiff = currentDate - new Date(startDate);
+  const daysDiff = timeDiff / (1000 * 60 * 60 * 24);
+  return  (daysDiff);
+}
+
+function getSolanaFromLST(lstAmount) {
+  const daysPassed = getDaysSince();
+  const lstValue = 1 + (0.00000001* daysPassed);
+  const solanaEquivalent = lstAmount * lstValue;
+  return solanaEquivalent;
+}
+
+function getLSTFromSolana(solanaAmount) {
+  const daysPassed = getDaysSince();
+  const lstValue = 1 + (0.00000001 * daysPassed);
+  const lstEquivalent = solanaAmount / lstValue;
+  return lstEquivalent;
+}
+
+
+ 
+
+
+
+
+
+app.post('/getPSOL',async(req,res)=>{
+  const amount=req.body.sol;
+  const psol = getLSTFromSolana(amount);
+  return res.send({psol})
+  
+})
+
+
+app.post('/getSOL',async(req,res)=>{
+  // console.log(req.body)
+  const amount=req.body.psol;
+  console.log("amount = ",amount)
+  const sol = getSolanaFromLST(amount);
+  console.log(sol)
+
+  return res.send({sol})
+
+})
+
+
+
  
 app.post('/helius',async(req,res)=>{
 
@@ -34,12 +98,8 @@ app.post('/helius',async(req,res)=>{
   const toUserAccount= arr[5]
   let amount= arr[2]
 const tokenType=arr[3]
-
-// console.log(arr)
-amount*=1e9
-// console.log(fromAddress,"\n",toUserAccount,"\n",amount,"\n",tokenType)
-// console.log(toUserAccount,amount,arr[3])
-// console.log(toUserAccount=="AkJwrYJtXMyWCFksYr9ist8L2iuUgbZDmu4kpMwf3aLf")
+ 
+amount*=1e9 
     if(amount>0&&toUserAccount=="AkJwrYJtXMyWCFksYr9ist8L2iuUgbZDmu4kpMwf3aLf."&&tokenType=="SOL"){
        await mintToken(fromAddress,amount)
         console.log("mint karo laude")
@@ -52,19 +112,7 @@ console.log("burnnn")
  await burn_And_Send_Native_Token(fromAddress,amount)
   console.log("burn and send bhadu")
 
-} 
-    // console.log(fromAddress,toUserAccount,amount)
-
-    // console.log(req.body)
- //--------------------------------
-
-//  burn_And_Send_Native_Token(fromAddress,amount)
-//   const x=await getSplTokenBalances()
-// .then((e)=>console.log(e))
-///-------------------------------
-// (1)
-// burn_And_Send_Native_Token(fromAddress,amount/1e9)
- 
+}  
 
 
 return res.send(arr)
