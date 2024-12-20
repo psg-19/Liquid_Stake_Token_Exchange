@@ -1,6 +1,6 @@
 const express=require('express')
 const app=express()
-const cors=require('cors')
+ 
 // const {mintToken} =require('./src/mintToken.jsx')
 const {
     Connection,
