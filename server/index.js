@@ -1,6 +1,6 @@
 const express=require('express')
 const app=express()
- 
+const cors=require('cors')
 // const {mintToken} =require('./src/mintToken.jsx')
 const {
     Connection,
@@ -24,14 +24,13 @@ require('dotenv').config();
 app.use(express.json());
 
 
-// app.use(cors({
-//   origin: "*",
-// //   origin: FRONTEND_URL,
+app.use(cors({
+  origin: "*",
+//   origin: FRONTEND_URL,
 
-//   optionsSuccessStatus: 200,
-//   credentials: true 
-
-// }));
+  optionsSuccessStatus: 200,
+  credentials: true 
+}));
 
 
 function getDaysSince() 
