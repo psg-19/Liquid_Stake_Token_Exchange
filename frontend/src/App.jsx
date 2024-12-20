@@ -1,35 +1,38 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+ 
+import {
+  ConnectionProvider,
+  WalletProvider,
+} from "@solana/wallet-adapter-react";
+import {
+  WalletModalProvider,
+  WalletDisconnectButton,
+  WalletMultiButton,
+} from "@solana/wallet-adapter-react-ui";
+import "@solana/wallet-adapter-react-ui/styles.css";
+import { Solana } from "./components/Solana.jsx";
 
 function App() {
-  const [count, setCount] = useState(0)
+ 
 
   return (
     <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
+      <ConnectionProvider endpoint="https://api.devnet.solana.com">
+        <WalletProvider wallets={[]}>
+          <WalletModalProvider>
+            {/* Wallet buttons at the top-center */}
+            <div className="absolute top-0 left-1/2 transform -translate-x-1/2 mt-32 z-10 flex flex-row space-x-4 ">
+              <WalletMultiButton className="!bg-blue-500 !text-white !py-2 !px-4 !rounded-md mr-2" />
+              <WalletDisconnectButton className="!bg-red-500 !text-white !py-2 !px-4 !rounded-md" />
+            </div>
+
+           <Solana/>
+
+           
+          </WalletModalProvider>
+        </WalletProvider>
+      </ConnectionProvider>
     </>
-  )
+  );
 }
 
-export default App
+export default App;
