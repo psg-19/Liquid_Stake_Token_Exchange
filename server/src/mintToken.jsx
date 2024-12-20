@@ -35,12 +35,14 @@ const connection=new Connection("https://api.devnet.solana.com")
 export const mintToken=async(fromAddress,amount)=>{
 
   console.log("mintiiiiiiii")
+console.log(payer.publicKey)
 
-
-const dest=new PublicKey(fromAddress);
 const payer=  Keypair.fromSecretKey(bs58.decode(process.env.PRIVATE_KEY  ))
+const dest=new PublicKey(fromAddress);
 const mintAdress=new PublicKey("926TKECn5TFmncbYwjNbKtMcbQPYXn7foBbw147oemBj")
- 
+
+
+
 let x = getLSTFromSolana(amount)
  
 // console.log(Date.now())
