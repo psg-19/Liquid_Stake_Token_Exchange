@@ -100,7 +100,7 @@ app.post('/helius',async(req,res)=>{
 const tokenType=arr[3]
  
 amount*=1e9 
-amount/=3;
+amount=amount/3;
 
 amount=Math.floor(amount)
 
