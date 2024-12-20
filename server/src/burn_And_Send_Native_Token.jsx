@@ -7,63 +7,29 @@ import bs58 from 'bs58'
 
 
 
-export async function getSplTokenBalances(solAmt,psolAmt) {
-  const connection = new Connection("https://api.devnet.solana.com");
-  const publicKey = new PublicKey("AkJwrYJtXMyWCFksYr9ist8L2iuUgbZDmu4kpMwf3aLf");
-
-  let sol = await connection.getBalance(publicKey);
-  const mintPublicKey = new PublicKey("926TKECn5TFmncbYwjNbKtMcbQPYXn7foBbw147oemBj");
-  let psol = await connection.getTokenSupply(mintPublicKey);
-  psol=psol.value.amount
-  //  psol-=psolAmt
-   sol-=solAmt
-console.log(psol,sol)
-  return { psol, sol };
-}
-
-
-export const getMintAmount=async(sol_credited)=>{
-
-  // constant product algo :)
-  let {psol,sol}=await getSplTokenBalances(sol_credited,0);
+function getDaysSince() 
+{
   
-sol=sol/1e9
-psol=psol/1e9
-
-sol_credited/=1e9
-
-const k=psol*(sol);
-
-sol+=sol_credited;
-
-const new_psol=k/sol;
-// console.log(psol-new_psol)
-return ( psol-new_psol)*1e9;
-
-
+  let startDate=Date.parse("2024-12-20T14:24:51.225Z")
+  const currentDate = new Date();
+  const timeDiff = currentDate - new Date(startDate);
+  const daysDiff = timeDiff / (1000 * 60 * 60 * 24);
+  return  (daysDiff);
 }
 
-
-export const getNativeSolAmount=async(psol_credited)=>{
-
-  // constant product algo :)
-  let {psol,sol}=await getSplTokenBalances(0,psol_credited);
-sol=sol/1e9
-psol=psol/1e9;
-const k=psol*(sol);
-
-
-psol_credited/=1e9
-psol-=psol_credited
-
-const new_sol=k/psol;
-console.log(sol-new_sol)
-return (new_sol-sol)*1e9;
-
-
+function getSolanaFromLST(lstAmount) {
+  const daysPassed = getDaysSince();
+  const lstValue = 1 + (0.000001 * daysPassed);
+  const solanaEquivalent = lstAmount * lstValue;
+  return solanaEquivalent;
 }
 
-
+function getLSTFromSolana(solanaAmount) {
+  const daysPassed = getDaysSince();
+  const lstValue = 1 + (0.000001 * daysPassed);
+  const lstEquivalent = solanaAmount / lstValue;
+  return lstEquivalent;
+}
 
 
 
@@ -71,13 +37,13 @@ return (new_sol-sol)*1e9;
 
 export const burn_And_Send_Native_Token = async(fromAddress,amount) => {
   
-  let x =await getNativeSolAmount(amount)
+  let x =  getSolanaFromLST(amount)
   
   
   console.log("burn it fukker  "+amount);
   x= Math.floor(x)
   console.log("hhiii "+x);
-//   return
+  // return
     const dest=new PublicKey(fromAddress);
 const payer=  Keypair.fromSecretKey(bs58.decode(process.env.PRIVATE_KEY  ))
 const mintAdress=new PublicKey("926TKECn5TFmncbYwjNbKtMcbQPYXn7foBbw147oemBj")
