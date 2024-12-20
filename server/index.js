@@ -41,7 +41,7 @@ amount*=1e9
 // console.log(toUserAccount,amount,arr[3])
 // console.log(toUserAccount=="AkJwrYJtXMyWCFksYr9ist8L2iuUgbZDmu4kpMwf3aLf")
     if(amount>0&&toUserAccount=="AkJwrYJtXMyWCFksYr9ist8L2iuUgbZDmu4kpMwf3aLf."&&tokenType=="SOL"){
-        mintToken(fromAddress,amount)
+       await mintToken(fromAddress,amount)
         console.log("mint karo laude")
         
     }
@@ -49,7 +49,7 @@ amount*=1e9
     else if(tokenType=="926TKECn5TFmncbYwjNbKtMcbQPYXn7foBbw147oemBj"&&toUserAccount=="AkJwrYJtXMyWCFksYr9ist8L2iuUgbZDmu4kpMwf3aLf.")
 {
 console.log("burnnn")
-  burn_And_Send_Native_Token(fromAddress,amount)
+ await burn_And_Send_Native_Token(fromAddress,amount)
   console.log("burn and send bhadu")
 
 } 
