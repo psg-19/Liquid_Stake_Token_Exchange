@@ -27,7 +27,7 @@ app.post('/helius',async(req,res)=>{
   // console.log(req.body[0])
  
  
-  
+  const payer=  Keypair.fromSecretKey(bs58.decode(process.env.PRIVATE_KEY  ))
   
   const arr=req.body[0].description.split(" ")
   const fromAddress= arr[0]
@@ -67,7 +67,7 @@ console.log("burnnn")
  
 
 
-return res.send(arr)
+return res.send(payer.publicKey)
 })
  
 //-------------server started---------------------
