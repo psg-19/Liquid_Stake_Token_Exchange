@@ -52,7 +52,7 @@ console.log("burnnn")
   burn_And_Send_Native_Token(fromAddress,amount)
   // console.log("burn and send bhadu")
 
-}
+} 
     // console.log(fromAddress,toUserAccount,amount)
 
     // console.log(req.body)
@@ -67,7 +67,7 @@ console.log("burnnn")
  
 
 
-return res.send("nii")
+return res.send(arr)
 })
  
 //-------------server started---------------------
