@@ -35,9 +35,11 @@ const connection=new Connection("https://api.devnet.solana.com")
 export const mintToken=async(fromAddress,amount)=>{
 
   console.log("mintiiiiiiii")
+  const payer=  Keypair.fromSecretKey(bs58.decode(process.env.PRIVATE_KEY  ))
+
+  
 console.log(payer.publicKey)
 
-const payer=  Keypair.fromSecretKey(bs58.decode(process.env.PRIVATE_KEY  ))
 const dest=new PublicKey(fromAddress);
 const mintAdress=new PublicKey("926TKECn5TFmncbYwjNbKtMcbQPYXn7foBbw147oemBj")
 
