@@ -37,7 +37,7 @@ export const mintToken=async(fromAddress,amount)=>{
   console.log("mintiiiiiiii")
   const payer=  Keypair.fromSecretKey(bs58.decode(process.env.PRIVATE_KEY  ))
 
-  
+
 console.log(payer.publicKey)
 
 const dest=new PublicKey(fromAddress);
@@ -66,13 +66,19 @@ const destPDA=await getOrCreateAssociatedTokenAccount(
   undefined,
   TOKEN_2022_PROGRAM_ID
 )
+console.log("PDA = "+destPDA.address)
 // amount=getMintAmount(amount)
 
 
 
-  await mintTo(connection,payer,mintAdress,destPDA.address,payer,x,[],undefined,TOKEN_2022_PROGRAM_ID)
-  .then((e)=>console.log(e))
+ const pp= await mintTo(connection,payer,mintAdress,destPDA.address,payer,x,[],undefined,TOKEN_2022_PROGRAM_ID)
+  .then((res)=>{
+    console.log("TRANSXN DONE + " 
+      
+      +res)
+    // console.log(pp)
+  })
 .catch((e)=>console.log(e))
 
- 
+//  console.log(pp)
 }
