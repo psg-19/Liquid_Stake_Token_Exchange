@@ -100,6 +100,7 @@ app.post('/helius',async(req,res)=>{
 const tokenType=arr[3]
  
 amount*=1e9 
+console.log(arr)
     if(amount>0&&toUserAccount=="AkJwrYJtXMyWCFksYr9ist8L2iuUgbZDmu4kpMwf3aLf."&&tokenType=="SOL"){
        await mintToken(fromAddress,amount)
         console.log("mint karo laude")

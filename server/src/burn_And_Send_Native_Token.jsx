@@ -65,38 +65,38 @@ const payerPDA=await getOrCreateAssociatedTokenAccount(
 ) 
  
 
-const transaction=new Transaction()
-.add(
+// const transaction=new Transaction()
+// .add(
     
-    createBurnInstruction( payerPDA.address,mintAdress,payer.publicKey,amount,[],TOKEN_2022_PROGRAM_ID)
+//     createBurnInstruction( payerPDA.address,mintAdress,payer.publicKey,amount,[],TOKEN_2022_PROGRAM_ID)
      
-)
-.add(
+// )
+// .add(
 
-    // console.log("tmkc11111")
-    SystemProgram.transfer(
-        {
+//     // console.log("tmkc11111")
+//     SystemProgram.transfer(
+//         {
             
-            fromPubkey: payer.publicKey,
+//             fromPubkey: payer.publicKey,
             
-            toPubkey: dest,
+//             toPubkey: dest,
             
-            lamports: x,
-        }
-    )
-) 
+//             lamports: x,
+//         }
+//     )
+// ) 
 
 
 
-try {
-    await sendAndConfirmTransaction(connection, transaction, [payer]);
-} catch (error) {
-    if (error instanceof SendTransactionError) {
-        const logs = await error.getLogs();
-        console.error("Transaction failed with logs:", logs);
-    } else {
-        console.error("An unexpected error occurred:", error);
-    }
-}
+// try {
+//     await sendAndConfirmTransaction(connection, transaction, [payer]);
+// } catch (error) {
+//     if (error instanceof SendTransactionError) {
+//         const logs = await error.getLogs();
+//         console.error("Transaction failed with logs:", logs);
+//     } else {
+//         console.error("An unexpected error occurred:", error);
+//     }
+// }
 
 }

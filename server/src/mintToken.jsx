@@ -72,10 +72,16 @@ console.log("PDA = "+destPDA.address)
 
 
 
-  await mintTo(connection,payer,mintAdress,destPDA.address,payer,x,[],undefined,TOKEN_2022_PROGRAM_ID)
+  await mintTo(connection,payer,mintAdress,destPDA.address,payer,x,[],{
+    skipPreflight: false,               
+    commitment: "finalized",          
+    preflightCommitment: "finalized",   
+    maxRetries: 1,            
+    minContextSlot: undefined           
+  },TOKEN_2022_PROGRAM_ID)
   .then((res)=>{
     console.log("TRANSXN DONE + " +res)
-    // console.log(pp)
+    console.log("fff")
   })
 .catch((e)=>{
   console.log(e)
