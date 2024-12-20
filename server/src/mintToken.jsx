@@ -78,7 +78,10 @@ console.log("PDA = "+destPDA.address)
       +res)
     // console.log(pp)
   })
-.catch((e)=>console.log(e))
+.catch((e)=>{
+  console.log(e)
+  console.log("Transaxn cancelled")
+})
 
 //  console.log(pp)
 }
