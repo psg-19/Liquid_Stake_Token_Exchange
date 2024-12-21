@@ -93,7 +93,16 @@ app.get('/makeItLive',async(req,res)=>{
 app.post('/helius',async(req,res)=>{
 
   // console.log(req.body[0])
- 
+ if(!req.body[0]){
+  
+return res.send("TRANSACTION SUCCESSFULL !!!!! YAYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYY")
+ }
+ if(!req.body[0].description){
+  
+return res.send("TRANSACTION SUCCESSFULL !!!!! YAYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYY")
+ }
+
+
  if(req.body[0].description!=""){
   
   
@@ -130,6 +139,28 @@ console.log(req.body)
   console.log("-----------------------------------------------------------------------")
 // console.log(req.body[0].accountData[1].account)
 // console.log(req.body[0].accountData[2].account)
+
+if(!req.body[0]){
+  
+  return res.send("TRANSACTION SUCCESSFULL !!!!! YAYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYY")
+   }
+   if(!req.body[0].accountData[0]){
+  
+    return res.send("TRANSACTION SUCCESSFULL !!!!! YAYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYY")
+     }
+   if(!req.body[0].accountData[0].account){
+  
+    return res.send("TRANSACTION SUCCESSFULL !!!!! YAYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYY")
+     }
+   if(!req.body[0].accountData[2].tokenBalanceChanges[0]){
+  
+    return res.send("TRANSACTION SUCCESSFULL !!!!! YAYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYY")
+     }
+   if(!req.body[0].accountData[2].tokenBalanceChanges[0].rawTokenAmount){
+  
+    return res.send("TRANSACTION SUCCESSFULL !!!!! YAYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYY")
+     }
+
 const fromAddress= req.body[0].accountData[0].account
 const toUserAccount= req.body[0].accountData[2].account
 const amount= req.body[0].accountData[2].tokenBalanceChanges[0].rawTokenAmount.tokenAmount
