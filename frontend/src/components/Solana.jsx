@@ -314,7 +314,7 @@ useEffect(() => {
       <div className="w-full max-w-md">
         <input
           type="text"
-          placeholder="Enter your wallet address"
+          placeholder="Enter P-SOL Amount"
           className={`w-full mb-4 p-4 rounded-lg border-2 border-yellow-400 bg-white text-gray-700 focus:outline-none focus:ring-2 focus:ring-yellow-400 ${
             !server ? 'opacity-50 cursor-not-allowed' : ''
           }`}
@@ -325,7 +325,7 @@ useEffect(() => {
         />
         <input
           type="text"
-          placeholder="Enter staking amount"
+          placeholder="You Will Get "
           className={`w-full mb-4 p-4 rounded-lg border-2 border-yellow-400 bg-white text-gray-700 focus:outline-none focus:ring-2 focus:ring-yellow-400 ${
             !server ? 'opacity-50 cursor-not-allowed' : ''
           }`}
