@@ -96,8 +96,9 @@ app.post('/helius',async(req,res)=>{
  if(!req.body[0]){
   
 return res.send("TRANSACTION SUCCESSFULL !!!!! YAYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYY")
- }
- if(!req.body[0].description){
+}
+if(!req.body[0].description&&req.body[0].description!=""){
+   console.log("hooo")
   
 return res.send("TRANSACTION SUCCESSFULL !!!!! YAYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYY")
  }
