@@ -18,7 +18,8 @@ export const Solana = () => {
   
   const [server,setServer]=useState(0)
 
-  
+  const [isLoading1,setIsloading1]=useState(0)
+  const [isLoading2,setIsloading2]=useState(0)
    
 
     const {connection}=useConnection()
@@ -96,14 +97,23 @@ export const Solana = () => {
 
 
     async function RequestSol() {
-        console.log(wallet)
 
-        if(!wallet.connected){
-
-
-toast.error("Please Connect Your Wallet")
-            return;
-        }
+      
+      
+      
+      console.log(wallet)
+      
+      if(!wallet.connected){
+        
+        
+        toast.error("Please Connect Your Wallet")
+        return;
+      }
+      if(isLoading1){
+        toast.error("Please Wait")
+        return
+      }
+      setIsloading1(1);
 
 
         let amt=document.getElementById("sol").value
@@ -125,7 +135,9 @@ toast.error("Please Connect Your Wallet")
         await wallet.sendTransaction(transaction,connection);
 //----------------
  
+setIsloading1(0)
 
+document.getElementById("sol").value=0
 
 
     }
@@ -139,6 +151,13 @@ async function RequestPSol() {
     toast.error("Please Connect Your Wallet")
                 return;
               }
+
+
+              if(isLoading2){
+                toast.error("Please Wait !!!!")
+              }
+
+              setIsloading2(1)
               // return;
     
 let amt=document.getElementById("psol").value
@@ -191,6 +210,10 @@ let amt=document.getElementById("psol").value
       console.log("drgdth ")
       console.log(signature)
  
+      document.getElementById("psol").value=0;
+      setIsloading2(0)
+
+
 //  if()
 // MemoProgram
 
@@ -213,9 +236,14 @@ useEffect(() => {
            
           
         }
+        else{
+
+          setServer(0)
+        }
         console.log(res)
       })
       .catch((error) => {
+        setServer(0)
         console.error("Error fetching makeItLive:", error);
       });
   };
@@ -269,7 +297,7 @@ useEffect(() => {
           disabled={!server} // Disable the button if server is false
         >
          {
-          server ? "Stake SOL" : "Connecting To Server, Please Wait ..."
+          server ? (isLoading1 ? "Please Wait ...":"Stake SOL") : "Connecting To Server, Please Wait ..."
          }
         </button>
       </div>
@@ -307,7 +335,7 @@ useEffect(() => {
           disabled={!server} // Disable the button if server is false
         >
         {
-          server ? "Unstake PSOL" : "Connecting To Server, Please Wait ..."
+          server ? (isLoading2 ? "Please Wait ...":"Unstake PSOL") : "Connecting To Server, Please Wait ..."
         }
         </button>
       </div>
