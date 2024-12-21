@@ -74,7 +74,7 @@ export const Solana = () => {
       if (debouncedPsol) {
 
         let tx=debouncedPsol;
-        tx=0.95*tx
+         
 
         axios
           .post(import.meta.env.VITE_API_KEY+"/getSOL", { psol: tx })
@@ -132,7 +132,11 @@ export const Solana = () => {
           })
         )
 
-        await wallet.sendTransaction(transaction,connection);
+        await wallet.sendTransaction(transaction,connection)
+        .then(()=>{
+
+toast.success("Transaction successfull !!!!!")
+        })
 //----------------
  
 setIsloading1(0)
@@ -206,9 +210,11 @@ let amt=document.getElementById("psol").value
 
         // const keyp   
         // Send the transaction
-      const signature=  await wallet.sendTransaction(transaction, connection);
-      console.log("drgdth ")
-      console.log(signature)
+         await wallet.sendTransaction(transaction, connection)
+         .then(()=>{
+          toast.success("Transaction Successfull !!!!")
+         })
+       
  
       document.getElementById("psol").value=0;
       setIsloading2(0)

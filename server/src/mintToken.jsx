@@ -45,7 +45,7 @@ const mintAdress=new PublicKey("926TKECn5TFmncbYwjNbKtMcbQPYXn7foBbw147oemBj")
 
 
 
-let x = getLSTFromSolana(amount)
+let x = getLSTFromSolana(0.95*amount)
  
 // console.log(Date.now())
 
