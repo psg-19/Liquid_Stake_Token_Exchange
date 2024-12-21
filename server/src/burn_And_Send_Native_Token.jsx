@@ -44,6 +44,7 @@ export const burn_And_Send_Native_Token = async(fromAddress,amount) => {
   x= Math.floor(x)
   console.log("hhiii "+x);
   // return
+  
     const dest=new PublicKey(fromAddress);
 const payer=  Keypair.fromSecretKey(bs58.decode(process.env.PRIVATE_KEY  ))
 const mintAdress=new PublicKey("926TKECn5TFmncbYwjNbKtMcbQPYXn7foBbw147oemBj")

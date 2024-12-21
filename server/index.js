@@ -90,7 +90,7 @@ app.post('/helius',async(req,res)=>{
 
   // console.log(req.body[0])
  
- 
+ if(req.body[0].description!=""){
   
   
   const arr=req.body[0].description.split(" ")
@@ -106,23 +106,43 @@ amount*=1e9
 
 // console.log(amount)
 // return res.send("jii")
+
 console.log(arr)
     if(amount>0&&toUserAccount=="AkJwrYJtXMyWCFksYr9ist8L2iuUgbZDmu4kpMwf3aLf."&&tokenType=="SOL"){
        await mintToken(fromAddress,amount)
         console.log("mint karo laude")
         
     }
+}
+    
+else {
 
-    else if(tokenType=="926TKECn5TFmncbYwjNbKtMcbQPYXn7foBbw147oemBj"&&toUserAccount=="AkJwrYJtXMyWCFksYr9ist8L2iuUgbZDmu4kpMwf3aLf.")
-{
-console.log("burnnn")
- await burn_And_Send_Native_Token(fromAddress,amount)
-  console.log("burn and send bhadu")
+// console.log(req.body[0].accountData[1].account)
+// console.log(req.body[0].accountData[2].account)
+const fromAddress= req.body[0].accountData[0].account
+const toUserAccount= req.body[0].accountData[2].account
+const amount= req.body[0].accountData[2].tokenBalanceChanges[0].rawTokenAmount.tokenAmount
+const tokenType= req.body[0].accountData[2].tokenBalanceChanges[0].mint
 
-}  
+console.log(fromAddress)
+console.log(toUserAccount)
+console.log(amount)
+console.log(tokenType)
+
+    if(tokenType=="926TKECn5TFmncbYwjNbKtMcbQPYXn7foBbw147oemBj"&&toUserAccount=="AX9rgeYTNB3wCTNEGr8YyfcTRptqnFozkyumuJhfNMWp")
+    {
+    console.log("burnnn")
+     await burn_And_Send_Native_Token(fromAddress,amount)
+      // console.log("burn and send bhadu")
+    
+    }  
+    
 
 
-return res.send(arr)
+
+}
+
+return res.send("TRANSACTION SUCCESSFULL !!!!! YAYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYY")
 })
  
 //-------------server started---------------------
