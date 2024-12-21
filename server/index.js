@@ -83,6 +83,10 @@ app.post('/getSOL',async(req,res)=>{
 
 })
 
+app.get('/makeItLive',async(req,res)=>{
+  res.send("Chalu hogya server")
+})
+
 
 
  
@@ -117,6 +121,13 @@ console.log(arr)
     
 else {
 
+
+
+  console.log("-----------------------------------------------------------------------")
+
+console.log(req.body)
+
+  console.log("-----------------------------------------------------------------------")
 // console.log(req.body[0].accountData[1].account)
 // console.log(req.body[0].accountData[2].account)
 const fromAddress= req.body[0].accountData[0].account
