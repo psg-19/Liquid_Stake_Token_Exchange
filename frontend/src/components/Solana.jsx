@@ -9,14 +9,18 @@ import { useConnection, useWallet } from '@solana/wallet-adapter-react';
 import axios from 'axios'
 import { ToastContainer, toast } from 'react-toastify';
 import { Connection, PublicKey, SystemProgram, Transaction } from '@solana/web3.js';
-import { ASSOCIATED_TOKEN_PROGRAM_ID, getAssociatedTokenAddress, TOKEN_2022_PROGRAM_ID } from '@solana/spl-token';
+import { ASSOCIATED_TOKEN_PROGRAM_ID, createTransferInstruction, getAssociatedTokenAddress, TOKEN_2022_PROGRAM_ID } from '@solana/spl-token';
 
 // import { Token } from '@solana/spl-token';
-
+import { createMemoInstruction } from '@solana/spl-memo';
 
 export const Solana = () => {
-    
-    
+  
+  const [server,setServer]=useState(0)
+
+  
+   
+
     const {connection}=useConnection()
     const wallet=useWallet()
     const [sol, setSol] = useState("");  
@@ -54,7 +58,7 @@ export const Solana = () => {
 
 
         axios
-          .post("http://localhost:3000/getPSOL", { sol: tx })
+          .post(import.meta.env.VITE_API_KEY+"/getPSOL", { sol: tx })
           .then((response) => {
             console.log(response);
             setPsolData(response.data.psol);
@@ -72,7 +76,7 @@ export const Solana = () => {
         tx=0.95*tx
 
         axios
-          .post("http://localhost:3000/getSOL", { psol: tx })
+          .post(import.meta.env.VITE_API_KEY+"/getSOL", { psol: tx })
           .then((response) => {
             console.log(response);
             setSolData(response.data.sol);
@@ -114,7 +118,7 @@ toast.error("Please Connect Your Wallet")
                 
                 toPubkey: new PublicKey("AkJwrYJtXMyWCFksYr9ist8L2iuUgbZDmu4kpMwf3aLf"),
                 
-                lamports: amt*1e9,
+                lamports: (amt*1e9),
           })
         )
 
@@ -135,7 +139,7 @@ async function RequestPSol() {
     toast.error("Please Connect Your Wallet")
                 return;
               }
-              return;
+              // return;
     
 let amt=document.getElementById("psol").value
 
@@ -166,21 +170,29 @@ let amt=document.getElementById("psol").value
           // const token = (connection, tokenMintAddress, TOKEN_PROGRAM_ID, wallet);
  
           transaction.add(
-            Token.createTransferInstruction(
+            createTransferInstruction(
+              userATA,
+              myATA,
+              wallet.publicKey,
+              amt * 1e9 ,// SPL tokens are usually divisible by 10^9
+              [],
                 TOKEN_2022_PROGRAM_ID,
-                userATA,
-                myATA,
-                wallet.publicKey,
-                [],
-                amt * 1e9  // SPL tokens are usually divisible by 10^9
             )
         );
-    
+
+       
+        const recentBlockhash = await connection.getLatestBlockhash();
+        transaction.recentBlockhash = recentBlockhash.blockhash;
+        transaction.feePayer = wallet.publicKey;
+
+        // const keyp   
         // Send the transaction
-        await wallet.sendTransaction(transaction, connection);
-
+      const signature=  await wallet.sendTransaction(transaction, connection);
+      console.log("drgdth ")
+      console.log(signature)
+ 
 //  if()
-
+// MemoProgram
 
 
 
@@ -190,69 +202,118 @@ let amt=document.getElementById("psol").value
 
 
 
+useEffect(() => {
+  
+  const checkServerStatus = () => {
+    axios.get(import.meta.env.VITE_API_KEY+"/makeItLive")
+    .then((res) => {
+        // console.log( import.meta.env.VITE_API_KEY+"/makeItLive")
+        if (res.data === "Chalu hogya server") {
+          setServer(1);
+           
+          
+        }
+        console.log(res)
+      })
+      .catch((error) => {
+        console.error("Error fetching makeItLive:", error);
+      });
+  };
+ 
+  const intervalId = setInterval(checkServerStatus, 5000);
+
+   
+  return () => clearInterval(intervalId);
+}, []); 
 
 
 
   return (
     <div className="bg-gradient-to-br from-blue-600 to-purple-700 min-h-screen flex flex-col justify-center items-center text-white p-6">
-              <div className="text-4xl font-bold mb-6">
-                Welcome To <span className="text-yellow-400">P_SOL</span>, Stake Your Solana
-              </div>
-              <div className="text-lg mb-8 font-medium">
-                Make sure you are connected to <span className="text-yellow-400">Devnet Mode</span>
-              </div>
+    <div className="text-4xl font-bold mb-6">
+      Welcome To <span className="text-yellow-400">P_SOL</span>, Stake Your Solana
+    </div>
+    <div className="text-lg mb-8 font-medium">
+      Make sure you are connected to <span className="text-yellow-400">Devnet Mode</span>
+    </div>
 
-              <div className="flex flex-row space-x-14">
-                <div className="w-full max-w-md">
-                  <input
-                    type="text"
-                    placeholder="Enter SOL Amount"
-                    className="w-full mb-4 p-4 rounded-lg border-2 border-yellow-400 bg-white text-gray-700 focus:outline-none focus:ring-2 focus:ring-yellow-400"
-                    id="sol"
-                    value={sol}
-                    onChange={(e) => setSol(e.target.value)} // Update SOL state on input change
-                  />
-                  <input
-                    type="text"
-                    placeholder="You Will get"
-                    className="w-full mb-4 p-4 rounded-lg border-2 border-yellow-400 bg-white text-gray-700 focus:outline-none focus:ring-2 focus:ring-yellow-400"
-                    value={psolData || ""} // Show PSOL data after debounce
-                    readOnly
-                  />
-                  <button 
-                  className="w-full bg-yellow-400 text-gray-900 font-semibold py-4 rounded-lg mt-6 transition-transform transform hover:scale-105 hover:bg-yellow-500"
-                  onClick={RequestSol}
-                  >
-                    Stake SOL
-                  </button>
-                </div>
+    <div className="flex flex-row space-x-14">
+      {/* SOL Staking Section */}
+      <div className="w-full max-w-md">
+        <input
+          type="text"
+          placeholder="Enter SOL Amount"
+          className={`w-full mb-4 p-4 rounded-lg border-2 border-yellow-400 bg-white text-gray-700 focus:outline-none focus:ring-2 focus:ring-yellow-400 ${
+            !server ? 'opacity-50 cursor-not-allowed' : ''
+          }`}
+          id="sol"
+          value={sol}
+          onChange={(e) => setSol(e.target.value)} // Update SOL state on input change
+          disabled={!server} // Disable the input if server is false
+        />
+        <input
+          type="text"
+          placeholder="You Will get"
+          className={`w-full mb-4 p-4 rounded-lg border-2 border-yellow-400 bg-white text-gray-700 focus:outline-none focus:ring-2 focus:ring-yellow-400 ${
+            !server ? 'opacity-50 cursor-not-allowed' : ''
+          }`}
+          value={psolData || ""} // Show PSOL data after debounce
+          readOnly
+          disabled={!server} // Disable the input if server is false
+        />
+        <button
+          className={`w-full bg-yellow-400 text-gray-900 font-semibold py-4 rounded-lg mt-6 transition-transform transform hover:scale-105 hover:bg-yellow-500 ${
+            !server ? 'opacity-50 cursor-not-allowed' : ''
+          }`}
+          onClick={RequestSol}
+          disabled={!server} // Disable the button if server is false
+        >
+         {
+          server ? "Stake SOL" : "Connecting To Server, Please Wait ..."
+         }
+        </button>
+      </div>
 
-                {/* -------------------------------------------------------- */}
+      {/* -------------------------------------------------------- */}
 
-                <div className="w-full max-w-md">
-                  <input
-                    type="text"
-                    placeholder="Enter your wallet address"
-                    className="w-full mb-4 p-4 rounded-lg border-2 border-yellow-400 bg-white text-gray-700 focus:outline-none focus:ring-2 focus:ring-yellow-400"
-                    id="psol"
-                    value={psol}
-                    onChange={(e) => setPsol(e.target.value)} // Update PSOL state on input change
-                  />
-                  <input
-                    type="text"
-                    placeholder="Enter staking amount"
-                    className="w-full mb-4 p-4 rounded-lg border-2 border-yellow-400 bg-white text-gray-700 focus:outline-none focus:ring-2 focus:ring-yellow-400"
-                    value={solData || ""} // Show SOL data after debounce
-                    readOnly
-                  />
-                  <button 
-                  onClick={RequestPSol}
-                  className="w-full bg-yellow-400 text-gray-900 font-semibold py-4 rounded-lg mt-6 transition-transform transform hover:scale-105 hover:bg-yellow-500">
-                    Unstake SOL
-                  </button>
-                </div>
-              </div>
-              <ToastContainer />
-            </div>
+      {/* PSOL Unstaking Section */}
+      <div className="w-full max-w-md">
+        <input
+          type="text"
+          placeholder="Enter your wallet address"
+          className={`w-full mb-4 p-4 rounded-lg border-2 border-yellow-400 bg-white text-gray-700 focus:outline-none focus:ring-2 focus:ring-yellow-400 ${
+            !server ? 'opacity-50 cursor-not-allowed' : ''
+          }`}
+          id="psol"
+          value={psol}
+          onChange={(e) => setPsol(e.target.value)} // Update PSOL state on input change
+          disabled={!server} // Disable the input if server is false
+        />
+        <input
+          type="text"
+          placeholder="Enter staking amount"
+          className={`w-full mb-4 p-4 rounded-lg border-2 border-yellow-400 bg-white text-gray-700 focus:outline-none focus:ring-2 focus:ring-yellow-400 ${
+            !server ? 'opacity-50 cursor-not-allowed' : ''
+          }`}
+          value={solData || ""} // Show SOL data after debounce
+          readOnly
+          disabled={!server} // Disable the input if server is false
+        />
+        <button
+          onClick={RequestPSol}
+          className={`w-full bg-yellow-400 text-gray-900 font-semibold py-4 rounded-lg mt-6 transition-transform transform hover:scale-105 hover:bg-yellow-500 ${
+            !server ? 'opacity-50 cursor-not-allowed' : ''
+          }`}
+          disabled={!server} // Disable the button if server is false
+        >
+        {
+          server ? "Unstake PSOL" : "Connecting To Server, Please Wait ..."
+        }
+        </button>
+      </div>
+    </div>
+    <ToastContainer />
+  </div>
+
   )
 }
