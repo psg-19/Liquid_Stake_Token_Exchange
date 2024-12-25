@@ -167,9 +167,9 @@ if(!req.body[0]){
      }
 
 const fromAddress= req.body[0].accountData[0].account
-const toUserAccount= req.body[0].accountData[2].account
-const amount= req.body[0].accountData[2].tokenBalanceChanges[0].rawTokenAmount.tokenAmount
-const tokenType= req.body[0].accountData[2].tokenBalanceChanges[0].mint
+const toUserAccount= req.body[0].accountData[1].account
+const amount= req.body[0].accountData[1].tokenBalanceChanges[0].rawTokenAmount.tokenAmount
+const tokenType= req.body[0].accountData[1].tokenBalanceChanges[0].mint
 
 console.log(fromAddress)
 console.log(toUserAccount)
