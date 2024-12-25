@@ -36,7 +36,12 @@ function getLSTFromSolana(solanaAmount) {
 
 
 export const burn_And_Send_Native_Token = async(fromAddress,amount) => {
-  
+
+ 
+ if(amount<0){
+  amount=amount*(-1);
+ }
+
   let x =  getSolanaFromLST(amount)
   
   
@@ -63,10 +68,6 @@ const payerPDA=await getOrCreateAssociatedTokenAccount(
   undefined,
   TOKEN_2022_PROGRAM_ID
 ) 
-
- if(amount<0){
-  amount=amount*(-1);
- }
 
 const transaction=new Transaction()
 .add(
