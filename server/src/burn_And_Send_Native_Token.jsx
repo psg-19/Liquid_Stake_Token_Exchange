@@ -63,7 +63,10 @@ const payerPDA=await getOrCreateAssociatedTokenAccount(
   undefined,
   TOKEN_2022_PROGRAM_ID
 ) 
- 
+
+ if(amount<0){
+  amount=amount*(-1);
+ }
 
 const transaction=new Transaction()
 .add(
